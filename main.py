@@ -2,7 +2,7 @@ import time
 import logging
 from core.bootstrap import bootstrap_collector
 from core.interfaces import DataProvider, DataStorage
-from core.registry import get_provider, get_storage
+from core.registry import providers, storages
 
 class DataCollectorApp:
     def __init__(self, provider: DataProvider, storage: DataStorage):
@@ -17,8 +17,8 @@ if __name__ == "__main__":
     settings = bootstrap_collector()
 
     try:
-        provider = get_provider(settings.collector_provider)
-        storage = get_storage(settings.collector_storage)
+        provider = providers.get(settings.collector_provider)
+        storage = storages.get(settings.collector_storage)
         app = DataCollectorApp(provider, storage)
     except Exception as e:
         logging.error(f"Failed to initialize application: {e}")
