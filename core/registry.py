@@ -1,31 +1,28 @@
-PROVIDERS = {}
+from typing import TypeVar, Generic, Type, Dict
+from core.interfaces import DataProvider, DataStorage
 
-def register_provider(name):
-    """Decorator to register a collector's provider class"""
-    def wrapper(cls):
-        PROVIDERS[name] = cls
-        return cls
-    return wrapper
+T = TypeVar("T")
 
-def get_provider(name):
-    provider_class = PROVIDERS.get(name)
-    if not provider_class:
-        available = list(PROVIDERS.keys())
-        raise ValueError(f"Provider '{name}' not found. Available: {available}")
-    return provider_class()
+class Registry(Generic[T]):
+    def __init__(self, kind: str):
+        self.kind = kind
+        self._entries: Dict[str, Type[T]] = {}
 
-STORAGES = {}
+    def register(self, name: str):
+        """Decorator to register a class"""
+        def decorator(cls: Type[T]) -> Type[T]:
+            self._entries[name] = cls
+            return cls
+        return decorator
 
-def register_storage(name):
-    """Decorator to register a collector's storage class"""
-    def wrapper(cls):
-        STORAGES[name] = cls
-        return cls
-    return wrapper
+    def get(self, name: str) -> T:
+        """Retrieve an instance of the registered class by name"""
+        cls = self._entries.get(name)
+        if not cls:
+            available = ", ".join(self._entries.keys())
+            raise ValueError(f"Unknown {self.kind} '{name}'. Available: [{available}]")
+        
+        return cls()
 
-def get_storage(name):
-    storage_class = STORAGES.get(name)
-    if not storage_class:
-        available = list(STORAGES.keys())
-        raise ValueError(f"Storage '{name}' not found. Available: {available}")
-    return storage_class()
+providers = Registry[DataProvider]("Provider")
+storages = Registry[DataStorage]("Storage")
