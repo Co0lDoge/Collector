@@ -1,9 +1,12 @@
 import os
 import time
-from pymongo import MongoClient
 import providers
 from interface import get_provider
+from pymongo import MongoClient
+from dotenv import load_dotenv
 import logging
+
+logging.basicConfig(level=logging.INFO)
 
 class DataCollectorApp:
     def __init__(self, db_client, db_name, provider):
