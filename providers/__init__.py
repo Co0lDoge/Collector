@@ -1,7 +1,7 @@
 import os
 import importlib
+import pkgutil
 
-for file in os.listdir(os.path.dirname(__file__)):
-    if file.endswith(".py") and file != "__init__.py":
-        module_name = file[:-3]
-        importlib.import_module(f"providers.{module_name}")
+for module in pkgutil.iter_modules([os.path.dirname(__file__)]):
+    if module.name != "__init__":
+        importlib.import_module(f"{__package__}.{module.name}")
