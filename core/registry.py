@@ -1,10 +1,3 @@
-from abc import ABC, abstractmethod
-
-class DataProvider(ABC):
-    @abstractmethod
-    def fetch_data(self):
-        pass
-
 PROVIDERS = {}
 
 def register_provider(name):
@@ -20,4 +13,19 @@ def get_provider(name):
         available = list(PROVIDERS.keys())
         raise ValueError(f"Provider '{name}' not found. Available: {available}")
     return provider_class()
-    
+
+STORAGES = {}
+
+def register_storage(name):
+    """Decorator to register a collector's storage class"""
+    def wrapper(cls):
+        STORAGES[name] = cls
+        return cls
+    return wrapper
+
+def get_storage(name):
+    storage_class = STORAGES.get(name)
+    if not storage_class:
+        available = list(STORAGES.keys())
+        raise ValueError(f"Storage '{name}' not found. Available: {available}")
+    return storage_class()
