@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import logging
 
 logging.basicConfig(level=logging.INFO)
+load_dotenv(override=False)
 
 class DataCollectorApp:
     def __init__(self, db_client, db_name, provider):
@@ -25,7 +26,7 @@ if __name__ == "__main__":
     
     PROVIDER_NAME = os.getenv("COLLECTOR_PROVIDER")
     try:
-        provider = get_provider(PROVIDER_NAME)
+        provider = get_provider(PROVIDER_NAME, **os.environ)
     except Exception as e:
         logging.error(f"Error getting provider: {e}")
         exit(1)
