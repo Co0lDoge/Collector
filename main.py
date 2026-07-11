@@ -20,13 +20,15 @@ class DataCollectorApp:
         # TODO: Insert data into MongoDB collection (MongoDB logic)
 
 if __name__ == "__main__":
-    MONGO_URI = os.getenv("MONGO_URI")
-    MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
+    MONGO_URI = os.environ["MONGO_URI"]
+    MONGO_DB_NAME = os.environ["MONGO_DB_NAME"]
+    PROVIDER_NAME = os.environ["COLLECTOR_PROVIDER"]
+    COLLECTOR_INTERVAL_SECONDS = int(os.environ["COLLECTOR_INTERVAL_SECONDS"])
+
     client = MongoClient(MONGO_URI)
-    
-    PROVIDER_NAME = os.getenv("COLLECTOR_PROVIDER")
+
     try:
-        provider = get_provider(PROVIDER_NAME, **os.environ)
+        provider = get_provider(PROVIDER_NAME)
     except Exception as e:
         logging.error(f"Error getting provider: {e}")
         exit(1)
@@ -34,6 +36,7 @@ if __name__ == "__main__":
     app = DataCollectorApp(client, MONGO_DB_NAME, provider)
 
     while True:
+        # TODO: Better scheduling?
         logging.info("Collecting data...")
         app.collect_data()
-        time.sleep(3600)
+        time.sleep(COLLECTOR_INTERVAL_SECONDS)

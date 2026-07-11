@@ -14,10 +14,10 @@ def register_provider(name):
         return cls
     return wrapper
 
-def get_provider(name, **kwargs):
+def get_provider(name):
     provider_class = PROVIDERS.get(name)
     if not provider_class:
         available = list(PROVIDERS.keys())
         raise ValueError(f"Provider '{name}' not found. Available: {available}")
-    return provider_class(**kwargs)
+    return provider_class()
     
