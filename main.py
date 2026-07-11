@@ -3,6 +3,7 @@ import time
 from pymongo import MongoClient
 import providers
 from interface import get_provider
+import logging
 
 class DataCollectorApp:
     def __init__(self, db_client, db_name, provider):
@@ -23,12 +24,12 @@ if __name__ == "__main__":
     try:
         provider = get_provider(PROVIDER_NAME)
     except Exception as e:
-        print(f"Error getting provider: {e}") # TODO: Use logging instead of print
+        logging.error(f"Error getting provider: {e}")
         exit(1)
 
     app = DataCollectorApp(client, MONGO_DB_NAME, provider)
 
     while True:
-        print(f"Collecting data...") # TODO: Use logging instead of print
+        logging.info("Collecting data...")
         app.collect_data()
         time.sleep(3600)
