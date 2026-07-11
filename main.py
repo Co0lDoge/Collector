@@ -1,10 +1,10 @@
-import os
 import time
 import providers
+import logging
 from interface import get_provider
 from pymongo import MongoClient
 from dotenv import load_dotenv
-import logging
+from settings import CollectorSettings
 
 logging.basicConfig(level=logging.INFO)
 load_dotenv(override=False)
@@ -20,23 +20,19 @@ class DataCollectorApp:
         # TODO: Insert data into MongoDB collection (MongoDB logic)
 
 if __name__ == "__main__":
-    MONGO_URI = os.environ["MONGO_URI"]
-    MONGO_DB_NAME = os.environ["MONGO_DB_NAME"]
-    PROVIDER_NAME = os.environ["COLLECTOR_PROVIDER"]
-    COLLECTOR_INTERVAL_SECONDS = int(os.environ["COLLECTOR_INTERVAL_SECONDS"])
-
-    client = MongoClient(MONGO_URI)
+    settings = CollectorSettings.from_env()
+    client = MongoClient(settings.mongo_uri)
 
     try:
-        provider = get_provider(PROVIDER_NAME)
+        provider = get_provider(settings.collector_provider)
     except Exception as e:
         logging.error(f"Error getting provider: {e}")
         exit(1)
 
-    app = DataCollectorApp(client, MONGO_DB_NAME, provider)
+    app = DataCollectorApp(client, settings.mongo_db_name, provider)
 
     while True:
         # TODO: Better scheduling?
         logging.info("Collecting data...")
         app.collect_data()
-        time.sleep(COLLECTOR_INTERVAL_SECONDS)
+        time.sleep(settings.collector_interval_seconds)
