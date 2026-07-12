@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy core framework only
 COPY core/ ./core/
-COPY main.py settings.py entrypoint.sh ./
+COPY main.py app.py settings.py entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
 # Create plugin folders
