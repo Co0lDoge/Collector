@@ -1,0 +1,12 @@
+providers/*
+storages/*
+!providers/README.MD
+!storages/README.MD
+
+.venv/
+__pycache__/
+*.pyc
+.env
+.git/
+.vscode/
+data/
