@@ -25,9 +25,8 @@ def bootstrap_collector():
 
     settings = CollectorSettings.from_env()
     
-    log_numeric_level = getattr(logging, settings.log_level, logging.INFO)
     logging.basicConfig(
-        level=log_numeric_level,
+        level=settings.log_level,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
