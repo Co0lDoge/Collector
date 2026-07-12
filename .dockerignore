@@ -1,6 +1,3 @@
-providers/*
-storages/*
-
 .venv/
 __pycache__/
 *.pyc
