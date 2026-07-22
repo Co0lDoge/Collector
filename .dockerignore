@@ -1,5 +1,5 @@
-providers/*
-storages/*
+plugins/providers/*
+plugins/storages/*
 
 .venv/
 __pycache__/

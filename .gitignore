@@ -1,7 +1,7 @@
-providers/*
-storages/*
-!providers/README.MD
-!storages/README.MD
+plugins/providers/*
+plugins/storages/*
+!plugins/providers/README.MD
+!plugins/storages/README.MD
 
 .venv/
 __pycache__/

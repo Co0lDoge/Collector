@@ -31,12 +31,7 @@ def bootstrap_collector():
     )
 
     logging.info("Initializing collector's plugins...")
-    _discover_modules("providers")
-    _discover_modules("storages")
+    _discover_modules("plugins.providers")
+    _discover_modules("plugins.storages")
 
     return settings
-
-
-
-
-    
