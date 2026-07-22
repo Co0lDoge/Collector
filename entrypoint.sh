@@ -3,20 +3,12 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Check for custom provider dependencies
-if [ -f "/app/providers/requirements.txt" ]; then
+# Check for plugin dependencies
+if [ -f "/app/plugins/plugin_requirements.txt" ]; then
     echo "=========================================================="
-    echo "Found custom provider requirements. Installing..."
+    echo "Found plugin requirements. Installing..."
     echo "=========================================================="
-    pip install --no-cache-dir -r /app/providers/requirements.txt
-fi
-
-# Check for custom storage dependencies
-if [ -f "/app/storages/requirements.txt" ]; then
-    echo "=========================================================="
-    echo "Found custom storage requirements. Installing..."
-    echo "=========================================================="
-    pip install --no-cache-dir -r /app/storages/requirements.txt
+    pip install --no-cache-dir -r /app/plugins/plugin_requirements.txt
 fi
 
 # Hand over control to the main Python process
