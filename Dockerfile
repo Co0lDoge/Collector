@@ -16,7 +16,7 @@ COPY main.py app.py settings.py entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
 # Create plugin folders
-RUN mkdir -p /app/providers /app/storages
+RUN mkdir -p /app/plugins/providers /app/plugins/storages
 
 # Use ENTRYPOINT to point to the shell script
 ENTRYPOINT ["/app/entrypoint.sh"]
