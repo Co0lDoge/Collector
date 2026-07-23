@@ -16,7 +16,8 @@ class DataCollectorApp:
         try:
             data = self.provider.fetch_data()
             self.storage.store_data(data)
-            logging.info("Ingestion completed successfully.")
+            self.provider.commit()
+            logging.info("Ingestion completed and commited successfully.")
         except Exception as e:
             logging.error(f"Ingestion failed: {e}")
 
