@@ -10,17 +10,26 @@ Data Storages into the Docker container at runtime.
 
 # Features
 * **Dynamic Plugin Architecture:** Add new data sources or database targets simply by mounting a Python file. 
-* **Automatic Dependencies Retrieval:** The Docker entrypoint automatically detects and installs custom `requirements.txt` packages provided by mounted plugins before booting.
+* **Automatic Dependencies Retrieval:** The Docker entrypoint automatically detects and installs custom `plugin_requirements.txt` packages provided by mounted plugins before booting.
 * **Execution Modes:** 
   * `ONCE`: Execution with zero idle resource consumption.
   * `DAEMON`: Built-in interval scheduler for standalone deployments.
 
 # Quick Start with Docker Compose
+Before running the container, set up your local `plugins` directory.
+```
+/collector/plugins/
+├── providers/
+│   └── example_provider.py
+├── storages/
+│   └── example_storage.py
+└── plugin_requirements.txt # e.g., pandas>=2.1.0, requests==2.31.0
+```
 When running the container, pass both the Core Framework variables and your Custom Plugin variables directly into the environment block.
 ```yaml
 services:
   collector:
-      image: collector:latest
+      build: https://github.com/Co0lDoge/Collector.git
       container_name: ${CONTAINER_PREFIX}_collector
       environment:
         # --- Core Framework Settings ---
@@ -36,13 +45,12 @@ services:
         - EXAMPLE_STORAGE_ENDPOINT=/app/data/output
 
       volumes:
-      - ./collector/providers:/app/providers:ro
-      - ./collector/storages:/app/storages:ro
+        - ./collector/plugins:/app/plugins:ro
 ```
 
 # How to Write a Plugin
 Plugins are dynamically loaded and configured using `pydantic-settings`.
-## 1. To write Data Provider plugin, create a file in mounted `/providers` directory
+## 1. To write a Data Provider plugin, create a file in the /plugins/providers directory
 ```python
 import logging
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -69,7 +77,7 @@ class ExampleFileProvider(DataProvider):
         return [{"example": "data"}]
 ```
 
-## 2. To write Data Storage plugin, create a file in mounted `/storages` directory
+## 2. To write a Data Storage plugin, create a file in the /plugins/storages directory
 ```python
 import logging
 from pydantic_settings import BaseSettings, SettingsConfigDict
