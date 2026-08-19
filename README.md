@@ -75,6 +75,10 @@ class ExampleFileProvider(DataProvider):
         endpoint = self.config.EXAMPLE_DATA_ENDPOINT
         logging.info(f"Retrieving data from files in {endpoint}...")  
         return [{"example": "data"}]
+
+    def commit(self):
+        logging.info(f"Data is saved, commiting transaction...")  
+        pass
 ```
 
 ## 2. To write a Data Storage plugin, create a file in the /plugins/storages directory
